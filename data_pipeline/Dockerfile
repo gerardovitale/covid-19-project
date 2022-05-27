@@ -11,6 +11,7 @@ ENV PATH=/opt/venv/bin:$PATH
 COPY ./data_pipeline/requirements.txt ${CONTAINER_BASE_DIR}/requirements.txt
 
 RUN pip install --upgrade pip && \
+    pip install flake8 pylint && \
     pip install --no-cache-dir -r ${CONTAINER_BASE_DIR}/requirements.txt
     
 FROM python:${PYTHON_VERSION}-${PY_IMAGE_VARIANT} AS build-image
