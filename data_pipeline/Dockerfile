@@ -21,6 +21,7 @@ ARG CONTAINER_BASE_DIR=/app
 ARG DATA_URL
 
 ENV CONTAINER_BASE_DIR=${CONTAINER_BASE_DIR} \
+    DATA_URL=${DATA_URL} \
     PATH=/opt/venv/bin:$PATH
 
 COPY --from=python3 /opt/venv /opt/venv

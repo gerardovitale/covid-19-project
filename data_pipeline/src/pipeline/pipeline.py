@@ -1,5 +1,3 @@
-import os
-
 
 def run_pipeline() -> None:
     print('this is a pipeline')
