@@ -18,14 +18,14 @@ runPipelineContainer() {
     echo "$(dateTimeNow) [INFO] - Building new pipeline-container container"
     docker build --platform linux/amd64 \
         -f data_pipeline/Dockerfile \
-        --build-arg DATA_URL=$DATA_URL \
+        --build-arg DATA_URL="$DATA_URL" \
         -t pipeline-container . || exit
 
     echo "$(dateTimeNow) [INFO] - Running pipeline-container container"
     docker run -d \
         --platform linux/amd64 \
         --name=pipeline-container \
-        -v $PWD/data:/app/data \
+        -v "$PWD"/data:/app/data \
         pipeline-container || exit
 
     docker logs -f pipeline-container
