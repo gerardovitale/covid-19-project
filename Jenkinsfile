@@ -1,11 +1,19 @@
 pipeline {
     agent any
 
+    environment {
+        OWNER = 'gerardovitale'
+        GIT_BRANCH = 'main'
+        GIT_HOST = 'github.com'
+        GIT_REPO = 'covid-19-project'
+        DATA_PIPELINE_NAME = 'data-pipeline'
+        DATA_PIPELINE_DOCKERFILE = 'data_pipeline/Dockerfile'
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 script {
-                    sh "source .env"
                     sh "git rev-parse --short HEAD > .git/commit-id"
                     COMMIT_ID = readFile('.git/commit-id').trim()
                     deleteDir()
