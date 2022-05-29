@@ -6,6 +6,7 @@ pipeline {
         GIT_BRANCH = 'main'
         GIT_HOST = 'github.com'
         GIT_REPO = 'covid-19-project'
+        DATA_URL=https://covid.ourworldindata.org/data/owid-covid-data.csv
         DATA_PIPELINE_NAME = 'data-pipeline'
         DATA_PIPELINE_DOCKERFILE = 'data_pipeline/Dockerfile'
     }
@@ -66,7 +67,6 @@ pipeline {
     post {
         always {
             script {
-                sh "docker container rm ${GIT_REPO}-${DATA_PIPELINE_NAME}"
                 sh "docker image rm ${GIT_REPO}-${DATA_PIPELINE_NAME}"
             }
             deleteDir()
