@@ -27,7 +27,7 @@ pipeline {
             steps {
                 sh "docker build -f ${DATA_PIPELINE_DOCKERFILE} \
                     --build-arg DATA_URL=${DATA_URL} \
-                    -t ${GIT_REPO}-${DATA_PIPELINE_NAME}"
+                    -t ${GIT_REPO}-${DATA_PIPELINE_NAME} ."
             }
         }
 
