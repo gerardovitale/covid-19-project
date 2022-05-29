@@ -50,9 +50,9 @@ pipeline {
             steps {
                 script {
                     sh "docker tag ${DOCKER_IMAGE_NAME} \
-                        ${OWNER}/${GIT_REPO}/${DATA_PIPELINE_NAME}:${COMMIT_ID}"
+                        ${OWNER}/${GIT_REPO}-${DATA_PIPELINE_NAME}:${COMMIT_ID}"
                     sh "docker tag ${DOCKER_IMAGE_NAME} \
-                        ${OWNER}/${GIT_REPO}/${DATA_PIPELINE_NAME}:latest"
+                        ${OWNER}/${GIT_REPO}-${DATA_PIPELINE_NAME}:latest"
                 }
 
                 withCredentials([usernamePassword(credentialsId: 'dockerhub',
@@ -61,8 +61,8 @@ pipeline {
                         --username $USERNAME \
                         --password $PASSWORD \
                         https://index.docker.io/v2/"
-                    sh "docker push ${OWNER}/${GIT_REPO}/${DATA_PIPELINE_NAME}:${COMMIT_ID}"
-                    sh "docker push ${OWNER}/${GIT_REPO}/${DATA_PIPELINE_NAME}:latest"
+                    sh "docker push ${OWNER}/${GIT_REPO}-${DATA_PIPELINE_NAME}:${COMMIT_ID}"
+                    sh "docker push ${OWNER}/${GIT_REPO}-${DATA_PIPELINE_NAME}:latest"
                 }
             }
         }
