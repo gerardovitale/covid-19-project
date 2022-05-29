@@ -26,7 +26,8 @@ pipeline {
         stage('PrepareDataPipeline') {
             steps {
                 script {
-                    DOCKER_IMAGE_NAME = env.GIT_REPO + '-' + env.DATA_PIPELINE_NAME + ':' + COMMIT_ID
+                    DOCKER_CONTAINER_NAME = env.GIT_REPO + '-' + env.DATA_PIPELINE_NAME
+                    DOCKER_IMAGE_NAME = DOCKER_CONTAINER_NAME + ':' + COMMIT_ID
                     sh "docker build -f ${DATA_PIPELINE_DOCKERFILE} \
                         --build-arg DATA_URL=${DATA_URL} \
                         -t ${DOCKER_IMAGE_NAME} ."
@@ -38,7 +39,7 @@ pipeline {
             steps {
                 script {
                     sh "docker run --rm \
-                        --name=${DOCKER_IMAGE_NAME} \
+                        --name=${DOCKER_CONTAINER_NAME} \
                         -v ${PWD}/data:/app/data \
                         ${DOCKER_IMAGE_NAME}"
                 }
