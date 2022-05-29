@@ -23,11 +23,12 @@ pipeline {
             }
         }
 
-        stage('BuildDataPipeline') {
+        stage('PrepareDataPipeline') {
             steps {
+                DOCKER_IMAGE_NAME = env.GIT_REPO + '-' + env.DATA_PIPELINE_NAME + ':' + COMMIT_ID
                 sh "docker build -f ${DATA_PIPELINE_DOCKERFILE} \
                     --build-arg DATA_URL=${DATA_URL} \
-                    -t ${GIT_REPO}-${DATA_PIPELINE_NAME} ."
+                    -t ${DOCKER_IMAGE_NAME} ."
             }
         }
 
@@ -35,9 +36,9 @@ pipeline {
             steps {
                 script {
                     sh "docker run --rm \
-                        --name=${GIT_REPO}-${DATA_PIPELINE_NAME} \
+                        --name=${DOCKER_IMAGE_NAME} \
                         -v ${PWD}/data:/app/data \
-                        ${GIT_REPO}-${DATA_PIPELINE_NAME}"
+                        ${DOCKER_IMAGE_NAME}"
                 }
             }
         }
@@ -45,9 +46,9 @@ pipeline {
         stage('PublishDataPipeline') {
             steps {
                 script {
-                    sh "docker tag ${COMMIT_ID} \
+                    sh "docker tag ${DOCKER_IMAGE_NAME} \
                         ${OWNER}/${GIT_REPO}/${DATA_PIPELINE_NAME}:${COMMIT_ID}"
-                    sh "docker tag ${COMMIT_ID} \
+                    sh "docker tag ${DOCKER_IMAGE_NAME} \
                         ${OWNER}/${GIT_REPO}/${DATA_PIPELINE_NAME}:latest"
                 }
 
