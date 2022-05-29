@@ -1,14 +1,7 @@
 pipeline {
     agent any
 
-    options {
-        ansiColor('xterm')
-        skipDefaultCheckout()
-        buildDiscarder(logRotator(numToKeepStr: '10'))
-    }
-
     stages {
-
         stage('Checkout') {
             steps {
                 script {
@@ -16,7 +9,7 @@ pipeline {
                     sh "git rev-parse --short HEAD > .git/commit-id"
                     COMMIT_ID = readFile('.git/commit-id').trim()
                     deleteDir()
-                    git url: "https://${GIT_HOST}/${OWNER}/${GIT_REPO}.git", branch: ${GIT_BRANCH}
+                    git url: "https://${GIT_HOST}/${OWNER}/${GIT_REPO}.git", branch: "${GIT_BRANCH}"
                 }
             }
         }
@@ -43,12 +36,9 @@ pipeline {
         stage('PublishDataPipeline') {
             steps {
                 script {
-                    // NEW_VERSION = sh(script: 'cat VERSION', returnStdout: true).trim()
-                    sh "docker tag \
-                        ${COMMIT_ID} \
+                    sh "docker tag ${COMMIT_ID} \
                         ${OWNER}/${GIT_REPO}/${DATA_PIPELINE_NAME}:${COMMIT_ID}"
-                    sh "docker tag \
-                        ${COMMIT_ID} \
+                    sh "docker tag ${COMMIT_ID} \
                         ${OWNER}/${GIT_REPO}/${DATA_PIPELINE_NAME}:latest"
                 }
 
@@ -63,13 +53,13 @@ pipeline {
                 }
             }
         }
-
+    }
 
     post {
         always {
             script {
-                sh "yes | docker container prune"
-                sh "yes | docker image prune"
+                sh "docker container rm ${GIT_REPO}-${DATA_PIPELINE_NAME}"
+                sh "docker image rm ${GIT_REPO}-${DATA_PIPELINE_NAME}"
             }
             deleteDir()
         }
