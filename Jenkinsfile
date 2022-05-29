@@ -68,7 +68,7 @@ pipeline {
     post {
         always {
             script {
-                sh "docker image rm ${GIT_REPO}-${DATA_PIPELINE_NAME}"
+                sh "docker image rm ${DOCKER_IMAGE_NAME}"
             }
             deleteDir()
         }
