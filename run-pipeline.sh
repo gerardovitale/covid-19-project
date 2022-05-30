@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source .env
+source .env.secrets
 source commons.sh
 
 runPipelineContainer() {
@@ -19,6 +20,7 @@ runPipelineContainer() {
     docker build --platform linux/amd64 \
         -f data_pipeline/Dockerfile \
         --build-arg DATA_URL="$DATA_URL" \
+        --build-arg MONGO_PASS="$MONGO_PASS" \
         -t pipeline-container . || exit
 
     echo "$(dateTimeNow) [INFO] - Running pipeline-container container"
