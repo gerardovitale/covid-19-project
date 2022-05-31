@@ -31,7 +31,7 @@ pipeline {
                     DOCKER_IMAGE_NAME = DOCKER_CONTAINER_NAME + ':' + COMMIT_ID
                     sh('docker build -f $DATA_PIPELINE_DOCKERFILE \
                         --build-arg DATA_URL=$DATA_URL \
-                        --build-arg MONGO_PASS=$MONGO_PASS \
+                        --build-arg MONGO_PASS=%MONGO_PASS% \
                         -t $DOCKER_IMAGE_NAME .')
                 }
             }
