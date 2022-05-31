@@ -28,15 +28,13 @@ pipeline {
                 script {
                     DOCKER_CONTAINER_NAME = env.GIT_REPO + '-' + env.DATA_PIPELINE_NAME
                     DOCKER_IMAGE_NAME = DOCKER_CONTAINER_NAME + ':' + COMMIT_ID
-                    
-                    withCredentials([string(credentialsId: 'MONGO_PASS', variable: 'MONGO_PASS')]) {
-                        sh '''
-                            set +x
-                            docker build -f "$DATA_PIPELINE_DOCKERFILE" \
-                            --build-arg DATA_URL="$DATA_URL" \
-                            --build-arg MONGO_PASS=$MONGO_PASS \
-                            -t $DOCKER_IMAGE_NAME .
-                        '''
+                    environment {
+                        MONGO_PASS = credentials('MONGO_PASS')
+                    }
+                    sh "docker build -f ${DATA_PIPELINE_DOCKERFILE} \
+                        --build-arg DATA_URL=${DATA_URL} \
+                        --build-arg MONGO_PASS=${MONGO_PASS} \
+                        -t ${DOCKER_IMAGE_NAME} ."
                     }
                 }
             }
