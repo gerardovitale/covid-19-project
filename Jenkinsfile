@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     sh "git rev-parse --short HEAD > .git/commit-id"
-                    COMMIT_ID = readFile('.git/commit-id').trim()
+                    env.COMMIT_ID = readFile('.git/commit-id').trim()
                     deleteDir()
                     git url: "https://${GIT_HOST}/${OWNER}/${GIT_REPO}.git", branch: "${GIT_BRANCH}"
                 }
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     env.DOCKER_CONTAINER_NAME = env.GIT_REPO + '-' + env.DATA_PIPELINE_NAME
-                    env.DOCKER_IMAGE_NAME = env.DOCKER_CONTAINER_NAME + ':' + COMMIT_ID
+                    env.DOCKER_IMAGE_NAME = env.DOCKER_CONTAINER_NAME + ':' + env.COMMIT_ID
                     
                     withCredentials([string(credentialsId: 'MONGO_PASS', variable: 'MONGO_PASS')]) {
                         sh '''
@@ -48,9 +48,9 @@ pipeline {
             steps {
                 script {
                     sh "docker run --rm \
-                        --name=${DOCKER_CONTAINER_NAME} \
-                        -v ${PWD}/data:/app/data \
-                        ${DOCKER_IMAGE_NAME}"
+                        --name=$DOCKER_CONTAINER_NAME \
+                        -v $PWD/data:/app/data \
+                        $DOCKER_IMAGE_NAME"
                 }
             }
         }
@@ -58,10 +58,10 @@ pipeline {
         stage('PublishDataPipeline') {
             steps {
                 script {
-                    sh "docker tag ${DOCKER_IMAGE_NAME} \
-                        ${OWNER}/${GIT_REPO}-${DATA_PIPELINE_NAME}:${COMMIT_ID}"
-                    sh "docker tag ${DOCKER_IMAGE_NAME} \
-                        ${OWNER}/${GIT_REPO}-${DATA_PIPELINE_NAME}:latest"
+                    sh "docker tag $DOCKER_IMAGE_NAME \
+                        $OWNER/$GIT_REPO-$DATA_PIPELINE_NAME:$COMMIT_ID"
+                    sh "docker tag $DOCKER_IMAGE_NAME \
+                        $OWNER/$GIT_REPO-$DATA_PIPELINE_NAME:latest"
                 }
 
                 withCredentials([usernamePassword(credentialsId: 'dockerhub',
@@ -70,8 +70,8 @@ pipeline {
                         --username $USERNAME \
                         --password $PASSWORD \
                         https://index.docker.io/v2/"
-                    sh "docker push ${OWNER}/${GIT_REPO}-${DATA_PIPELINE_NAME}:${COMMIT_ID}"
-                    sh "docker push ${OWNER}/${GIT_REPO}-${DATA_PIPELINE_NAME}:latest"
+                    sh "docker push $OWNER/$GIT_REPO-$DATA_PIPELINE_NAME:$COMMIT_ID"
+                    sh "docker push $OWNER/$GIT_REPO-$DATA_PIPELINE_NAME:latest"
                 }
             }
         }
@@ -80,7 +80,9 @@ pipeline {
     post {
         always {
             script {
-                sh "docker image rm ${DOCKER_IMAGE_NAME}"
+                sh "yes | docker container prune && \
+                    docker image rm $DOCKER_IMAGE_NAME && \
+                    yes | docker image prune"
             }
             deleteDir()
         }
