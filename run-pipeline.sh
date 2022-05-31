@@ -28,6 +28,7 @@ runPipelineContainer() {
         --platform linux/amd64 \
         --name=pipeline-container \
         -v "$PWD"/data:/app/data \
+        -v "$PWD"/data/info.log:/app/data/info.log \
         pipeline-container || exit
 
     docker logs -f pipeline-container
