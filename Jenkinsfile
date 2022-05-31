@@ -36,6 +36,7 @@ pipeline {
                             --build-arg MONGO_PASS=$MONGO_PASS \
                             -t $DOCKER_IMAGE_NAME .",
                             returnStdout: false)
+                    }
                 }
             }
         }
