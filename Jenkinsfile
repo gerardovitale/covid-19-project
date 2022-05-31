@@ -9,6 +9,7 @@ pipeline {
         DATA_URL = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
         DATA_PIPELINE_NAME = 'data-pipeline'
         DATA_PIPELINE_DOCKERFILE = 'data_pipeline/Dockerfile'
+        
         MONGO_PASS = credentials('MONGO_PASS')
     }
 
@@ -27,12 +28,14 @@ pipeline {
         stage('PrepareDataPipeline') {
             steps {
                 script {
-                    DOCKER_CONTAINER_NAME = env.GIT_REPO + '-' + env.DATA_PIPELINE_NAME
-                    DOCKER_IMAGE_NAME = DOCKER_CONTAINER_NAME + ':' + COMMIT_ID
+                    environment {
+                        DOCKER_CONTAINER_NAME = env.GIT_REPO + '-' + env.DATA_PIPELINE_NAME
+                        DOCKER_IMAGE_NAME = DOCKER_CONTAINER_NAME + ':' + COMMIT_ID
+                    }
                     sh('docker build -f $DATA_PIPELINE_DOCKERFILE \
                         --build-arg DATA_URL=$DATA_URL \
                         --build-arg MONGO_PASS=$MONGO_PASS \
-                        -t \$DOCKER_IMAGE_NAME .')
+                        -t $DOCKER_IMAGE_NAME .')
                 }
             }
         }
