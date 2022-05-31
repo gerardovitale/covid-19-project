@@ -1,7 +1,6 @@
+from pipeline.config.logger import get_logger
+
 
 def run_pipeline() -> None:
-    print('this is a pipeline')
-
-
-if __name__ == "__main__":
-    run_pipeline()
+    logger = get_logger('Pipeline')
+    logger.info('this is the pipeline writing from the logger')

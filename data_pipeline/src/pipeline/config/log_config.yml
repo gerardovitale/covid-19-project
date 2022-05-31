@@ -22,9 +22,9 @@ handlers:
 loggers:
   sampleLogger:
     level: DEBUG
-    handlers: [console, file_handler]
+    handlers: [ console, file_handler ]
     propagate: no
 
 root:
   level: DEBUG
-  handlers: [console]
+  handlers: [ console ]

@@ -3,7 +3,7 @@
 # run tests
 echo "***************************************************************************"
 echo "[INFO] running python unittest"
-python -m unittest discover "$CONTAINER_BASE_DIR"/tests || exit 1
+python -m unittest discover "$CONTAINER_BASE_DIR"/ || exit 1
 
 # Analysing the code with pylint
 echo "***************************************************************************"
@@ -20,4 +20,4 @@ flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statist
 # execute pipeline
 echo "***************************************************************************"
 echo "[INFO] executing data pipeline"
-python -u "$CONTAINER_BASE_DIR"/pipeline/pipeline.py
+python -u "$CONTAINER_BASE_DIR"/run.py
