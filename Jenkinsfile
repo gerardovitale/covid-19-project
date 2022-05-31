@@ -9,6 +9,7 @@ pipeline {
         DATA_URL = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
         DATA_PIPELINE_NAME = 'data-pipeline'
         DATA_PIPELINE_DOCKERFILE = 'data_pipeline/Dockerfile'
+        MONGO_PASS = credentials('MONGO_PASS')
     }
 
     stages {
