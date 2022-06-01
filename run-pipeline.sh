@@ -4,6 +4,11 @@ source .env
 source .env.secrets
 source commons.sh
 
+MODE=dev
+if [[ $1 != '' ]]; then
+    MODE=$1
+fi
+
 runPipelineContainer() {
     containerRunning=$(docker ps | grep pipeline-container)
     if [[ $containerRunning ]]; then
@@ -19,6 +24,7 @@ runPipelineContainer() {
     echo "$(dateTimeNow) [INFO] - Building new pipeline-container container"
     docker build --platform linux/amd64 \
         -f data_pipeline/Dockerfile \
+        --build-arg MODE="$MODE" \
         --build-arg DATA_URL="$DATA_URL" \
         --build-arg MONGO_PASS="$MONGO_PASS" \
         -t pipeline-container . || exit

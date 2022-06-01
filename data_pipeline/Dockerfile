@@ -19,10 +19,12 @@ FROM python:${PYTHON_VERSION}-${PY_IMAGE_VARIANT} AS build-image
 ENV PYTHONUNBUFFERED 1
 
 ARG CONTAINER_BASE_DIR=/app
+ARG MODE
 ARG DATA_URL
 ARG MONGO_PASS
 
 ENV CONTAINER_BASE_DIR=${CONTAINER_BASE_DIR} \
+    MODE=${MODE} \
     DATA_URL=${DATA_URL} \
     MONGO_PASS=${MONGO_PASS} \
     PATH=/opt/venv/bin:$PATH
@@ -35,4 +37,4 @@ COPY ./data_pipeline/entrypoint.sh ${CONTAINER_BASE_DIR}/
 WORKDIR ${CONTAINER_BASE_DIR}/
 RUN chmod +x ./entrypoint.sh
 
-ENTRYPOINT ["bash", "./entrypoint.sh"]
+ENTRYPOINT ["bash", "./entrypoint.sh", "${MODE}"]
