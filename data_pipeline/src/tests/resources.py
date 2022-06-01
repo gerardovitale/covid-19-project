@@ -1,3 +1,4 @@
+from pandas import read_csv, DataFrame
 
 EXPECTED_FEATURES = [
     'iso_code', 'continent', 'location', 'date', 'total_cases', 'new_cases',
@@ -27,3 +28,7 @@ EXPECTED_FEATURES = [
     'life_expectancy', 'human_development_index',
     'excess_mortality_cumulative_absolute', 'excess_mortality_cumulative',
     'excess_mortality', 'excess_mortality_cumulative_per_million']
+
+
+def mock_data(test_file: str) -> DataFrame:
+    return read_csv(f'/app/data/{test_file}')
