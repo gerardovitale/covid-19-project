@@ -18,7 +18,7 @@ pipeline {
                     sh "git rev-parse --short HEAD > .git/commit-id"
                     env.COMMIT_ID = readFile('.git/commit-id').trim()
                     deleteDir()
-                    git url: "https://${GIT_HOST}/${OWNER}/${GIT_REPO}.git", branch: "${GIT_BRANCH}"
+                    git url: "https://$GIT_HOST/$OWNER/$GIT_REPO.git", branch: "$GIT_BRANCH"
                 }
             }
         }
@@ -49,7 +49,7 @@ pipeline {
                 script {
                     sh "docker run --rm \
                         --name=$DOCKER_CONTAINER_NAME \
-                        -v $PWD/data:/app/data \
+                        -v $WORKSPACE/data:/app/data \
                         $DOCKER_IMAGE_NAME"
                 }
             }
