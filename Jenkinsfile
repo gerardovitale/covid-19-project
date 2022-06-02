@@ -49,7 +49,7 @@ pipeline {
                 script {
                     sh "docker run --rm \
                         --name=$DOCKER_CONTAINER_NAME \
-                        -v $PWD/data:/app/data \
+                        -v $WORKSPACE/data:/app/data \
                         $DOCKER_IMAGE_NAME"
                 }
             }
