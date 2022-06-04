@@ -18,10 +18,11 @@ runAPIContainer() {
     echo "$(dateTimeNow) [INFO] - Running $SERVICE_NAME"
     docker run -d \
         --platform linux/amd64 \
-        --name=$SERVICE_NAME \
-        $SERVICE_NAME || exit
+        --name="$SERVICE_NAME" \
+        -p "$API_PORT":"$API_PORT" \
+        "$SERVICE_NAME" || exit
 
-    docker logs -f $SERVICE_NAME
+    docker logs -f "$SERVICE_NAME"
 }
 
 runAPIContainer
