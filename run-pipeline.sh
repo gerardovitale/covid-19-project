@@ -19,17 +19,17 @@ runPipelineContainer() {
         --build-arg MODE="$MODE" \
         --build-arg DATA_URL="$DATA_URL" \
         --build-arg MONGO_PASS="$MONGO_PASS" \
-        -t $SERVICE_NAME . || exit
+        -t "$SERVICE_NAME" . || exit
 
     echo "$(dateTimeNow) - [INFO] - Running $SERVICE_NAME"
     docker run -d \
         --platform linux/amd64 \
-        --name=$SERVICE_NAME \
+        --name="$SERVICE_NAME" \
         -v "$PWD"/data:/app/data \
         -v "$PWD"/data/info.log:/app/data/info.log \
-        $SERVICE_NAME || exit
+        "$SERVICE_NAME" || exit
 
-    docker logs -f $SERVICE_NAME
+    docker logs -f "$SERVICE_NAME"
 }
 
 runPipelineContainer
