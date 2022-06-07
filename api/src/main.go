@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"covid-19-project/pkg/app"
+	"covid-19-project/pkg/repo"
+	"covid-19-project/pkg/services"
 	"fmt"
 	"log"
 	"os"
@@ -39,13 +41,16 @@ func run() error {
 	if err := client.Ping(context.TODO(), readpref.Primary()); err != nil {
 		panic(err)
 	}
-	log.Println("Successfully connected and pinged to Mongo Atlas DB")
+	log.Println("- Main - Successfully connected and pinged to Mongo Atlas DB")
+
+	repository := repo.NewRepository(client.Database("covid-19-project"))
+	service := services.NewService(repository)
 
 	// create router dependency
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	server := app.NewServer(router)
+	server := app.NewServer(router, service)
 
 	// start the server
 	err = server.Run()

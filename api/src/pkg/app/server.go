@@ -1,6 +1,7 @@
 package app
 
 import (
+	"covid-19-project/pkg/services"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -8,13 +9,15 @@ import (
 
 // Server class definition
 type Server struct {
-	router *gin.Engine
+	router  *gin.Engine
+	service services.Service
 }
 
 // Server constructor
-func NewServer(router *gin.Engine) *Server {
+func NewServer(router *gin.Engine, service services.Service) *Server {
 	return &Server{
-		router: router,
+		router:  router,
+		service: service,
 	}
 }
 
@@ -27,7 +30,7 @@ func (s *Server) Run() error {
 	err := r.Run()
 
 	if err != nil {
-		log.Printf("Server - there was an error calling Run on router: %v", err)
+		log.Printf("- Server - there was an error calling Run on router: %v", err)
 		return err
 	}
 

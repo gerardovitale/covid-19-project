@@ -9,6 +9,7 @@ func (s *Server) Routes() *gin.Engine {
 	v1 := router.Group("/v1/api")
 	{
 		v1.GET("/status", s.ApiStatus())
+		v1.GET("/new_cases", s.GetNewCasesPerLocation())
 	}
 
 	return router

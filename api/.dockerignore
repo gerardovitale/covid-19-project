@@ -1,0 +1,4 @@
+# Ignore all files which are not go type
+!**/*.go
+!**/*.mod
+!**/*.sum
