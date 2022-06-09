@@ -22,10 +22,10 @@ func NewRepository(db *mongo.Database) Repository {
 }
 
 // new_cases_per_month_n_location
-func (r *repository) GetNewCasesPerLocation(location string) ([]services.NewCasesResponse, error) {
+func (repo *repository) GetNewCasesPerLocation(location string) ([]services.NewCasesResponse, error) {
 	log.Println("- Repo - new cases repo is being executed")
 
-	collection := r.db.Collection("new_cases_per_month_n_location")
+	collection := repo.db.Collection("new_cases_per_month_n_location")
 	filter := bson.D{primitive.E{Key: "location", Value: location}}
 	cursor, err := collection.Find(context.TODO(), filter)
 

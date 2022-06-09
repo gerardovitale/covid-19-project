@@ -22,12 +22,12 @@ func NewServer(router *gin.Engine, service services.Service) *Server {
 }
 
 // Server run main method
-func (s *Server) Run() error {
+func (server *Server) Run() error {
 	// run function that initializes the routes
-	r := s.Routes()
+	router := server.Routes()
 
 	// run the server through the router
-	err := r.Run()
+	err := router.Run()
 
 	if err != nil {
 		log.Printf("- Server - there was an error calling Run on router: %v", err)
@@ -35,4 +35,18 @@ func (s *Server) Run() error {
 	}
 
 	return nil
+}
+
+// Server routes
+func (server *Server) Routes() *gin.Engine {
+	router := server.router
+
+	// group all routes under /v1/api
+	v1 := router.Group("/v1/api")
+	{
+		v1.GET("/status", server.ApiStatus())
+		v1.GET("/new_cases", server.GetNewCasesPerLocation())
+	}
+
+	return router
 }

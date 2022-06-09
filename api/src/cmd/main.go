@@ -24,6 +24,20 @@ func main() {
 }
 
 func run() error {
+	repository := setupRepositoryDB()
+	service := services.NewService(repository)
+	server := setupServer(service)
+
+	err := server.Run()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func setupRepositoryDB() repo.Repository {
 	uri := os.Getenv("MONGO_PASS")
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 
@@ -43,21 +57,12 @@ func run() error {
 	}
 	log.Println("- Main - Successfully connected and pinged to Mongo Atlas DB")
 
-	repository := repo.NewRepository(client.Database("covid-19-project"))
-	service := services.NewService(repository)
+	return repo.NewRepository(client.Database("covid-19-project"))
+} 
 
-	// create router dependency
+func setupServer(service services.Service) *app.Server {
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	server := app.NewServer(router, service)
-
-	// start the server
-	err = server.Run()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return app.NewServer(router, service)
 }

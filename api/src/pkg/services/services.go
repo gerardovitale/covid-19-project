@@ -22,14 +22,14 @@ func NewService(repo Repository) Service {
 	return &service{repo: repo}
 }
 
-func (s *service) GetNewCasesPerLocation(location string) ([]NewCasesResponse, error) {
+func (service *service) GetNewCasesPerLocation(location string) ([]NewCasesResponse, error) {
 	log.Println("- Service - new cases service is being execute")
 
 	if location == "" {
 		return []NewCasesResponse{}, errors.New("Service - location required")
 	}
 	
-	data, err := s.repo.GetNewCasesPerLocation(location)
+	data, err := service.repo.GetNewCasesPerLocation(location)
 
 	if err != nil {
 		log.Printf("error: %v", err.Error())
