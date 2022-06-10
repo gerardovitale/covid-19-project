@@ -1,9 +1,9 @@
 package app
 
 import (
-	"covid-19-project/pkg/services"
 	"log"
 
+	"github.com/covid-19-project/api/src/pkg/services"
 	"github.com/gin-gonic/gin"
 )
 

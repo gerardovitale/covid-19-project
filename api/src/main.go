@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"covid-19-project/pkg/app"
-	"covid-19-project/pkg/repo"
-	"covid-19-project/pkg/services"
 	"fmt"
 	"log"
 	"os"
 
+	"github.com/covid-19-project/api/src/pkg/app"
+	"github.com/covid-19-project/api/src/pkg/repo"
+	"github.com/covid-19-project/api/src/pkg/services"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -24,20 +24,6 @@ func main() {
 }
 
 func run() error {
-	repository := setupRepositoryDB()
-	service := services.NewService(repository)
-	server := setupServer(service)
-
-	err := server.Run()
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func setupRepositoryDB() repo.Repository {
 	uri := os.Getenv("MONGO_PASS")
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 
@@ -57,12 +43,21 @@ func setupRepositoryDB() repo.Repository {
 	}
 	log.Println("- Main - Successfully connected and pinged to Mongo Atlas DB")
 
-	return repo.NewRepository(client.Database("covid-19-project"))
-} 
+	repository := repo.NewRepository(client.Database("covid-19-project"))
+	service := services.NewService(repository)
 
-func setupServer(service services.Service) *app.Server {
+	// create router dependency
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	return app.NewServer(router, service)
+	server := app.NewServer(router, service)
+
+	// start the server
+	err = server.Run()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
