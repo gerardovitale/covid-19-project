@@ -26,5 +26,5 @@ jobs:
 
     - name: Test app package
       run: |
-        ls
-        go test -v api/src/pkg/app/
+        cd api/src/
+        go test -v -cover ./...
