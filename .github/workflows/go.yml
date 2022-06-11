@@ -20,8 +20,12 @@ jobs:
 
     - name: Build
       run: |
-        go mod init ./api/src/
-        go build -v ./api/src/
+        cd api/src/
+        go mod init github.com/covid-19-project/api/src
+        go mod tidy
+        go build -v
 
     - name: Test app package
-      run: go test -v ./api/src/pkg/app/
+      run: |
+        ls
+        go test -v api/src/pkg/app/
