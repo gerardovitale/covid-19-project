@@ -21,7 +21,6 @@ jobs:
     - name: Build
       run: |
         cd api/src/
-        go mod init github.com/covid-19-project/api/src
         go mod tidy
         go build -v
 
