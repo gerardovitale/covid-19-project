@@ -9,10 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func setupTestServer(t *testing.T, store repo.Repository) *Server {
+func setupTestServer(t *testing.T, repo repo.Repository) *Server {
 	router := gin.Default()
 	router.Use(cors.Default())
-	server := NewServer(router, store)
+	server := NewServer(router, repo)
 	server.Routes()
 
 	return server

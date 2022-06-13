@@ -51,16 +51,4 @@ func TestGetNewCasesPerLocation(t *testing.T) {
 
 	log.Println(reflect.TypeOf(recorder.Body))
 	log.Println(recorder.Body)
-
-	type Respose struct {
-		Data   services.NewCasesResponse `json:"data"`
-		Status int                       `json:"status"`
-	}
-	var response Respose
-	err = json.Unmarshal(recorder.Body.Bytes(), &response)
-	require.NoError(t, err)
-	require.Equal(t, 200, response.Status)
-
-	log.Println(response)
-
 }
