@@ -1,7 +1,6 @@
 package app
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -9,7 +8,6 @@ import (
 	"testing"
 
 	mockdb "github.com/covid-19-project/api/src/pkg/repo/mock"
-	"github.com/covid-19-project/api/src/pkg/services"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 )
