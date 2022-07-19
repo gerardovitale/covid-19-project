@@ -6,7 +6,7 @@ source commons.sh
 SERVICE_NAME=jupyter-container
 
 runJupyterContainer() {
-    cleanUpDocker
+    cleanUpDocker SERVICE_NAME
 
     echo "$(dateTimeNow) - [INFO] - Building new $SERVICE_NAME"
     docker build --platform linux/amd64 \
