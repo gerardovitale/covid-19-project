@@ -23,18 +23,18 @@ func TestGetNewCasesPerLocation(t *testing.T) {
 
 	mt.Run("success", func(mt *mtest.T) {
 		newCase1 := services.NewCasesResponse{
-			Year:       2021,
-			Month:      12,
-			Location:   "testLocation",
-			TotalCases: 0,
-			NewCases:   0,
+			Year:        2021,
+			Month:       12,
+			Location:    "testLocation",
+			Total_Cases: 1,
+			New_Cases:   1,
 		}
 		newCase2 := services.NewCasesResponse{
-			Year:       2022,
-			Month:      1,
-			Location:   "testLocation",
-			TotalCases: 0,
-			NewCases:   0,
+			Year:        2022,
+			Month:       1,
+			Location:    "testLocation",
+			Total_Cases: 2,
+			New_Cases:   3,
 		}
 		expectedNewCases := []services.NewCasesResponse{newCase1, newCase2}
 
@@ -45,16 +45,16 @@ func TestGetNewCasesPerLocation(t *testing.T) {
 			primitive.E{Key: "year", Value: expectedNewCases[0].Year},
 			primitive.E{Key: "month", Value: expectedNewCases[0].Month},
 			primitive.E{Key: "location", Value: expectedNewCases[0].Location},
-			primitive.E{Key: "total_cases", Value: expectedNewCases[0].TotalCases},
-			primitive.E{Key: "new_cases", Value: expectedNewCases[0].NewCases},
+			primitive.E{Key: "total_cases", Value: expectedNewCases[0].Total_Cases},
+			primitive.E{Key: "new_cases", Value: expectedNewCases[0].New_Cases},
 		})
 		mockCursor2 := mtest.CreateCursorResponse(1, databaseName+"."+collectionName, mtest.NextBatch, bson.D{
 			primitive.E{Key: "_id", Value: primitive.NewObjectID()},
 			primitive.E{Key: "year", Value: expectedNewCases[1].Year},
 			primitive.E{Key: "month", Value: expectedNewCases[1].Month},
 			primitive.E{Key: "location", Value: expectedNewCases[1].Location},
-			primitive.E{Key: "total_cases", Value: expectedNewCases[1].TotalCases},
-			primitive.E{Key: "new_cases", Value: expectedNewCases[1].NewCases},
+			primitive.E{Key: "total_cases", Value: expectedNewCases[1].Total_Cases},
+			primitive.E{Key: "new_cases", Value: expectedNewCases[1].New_Cases},
 		})
 		killCursors := mtest.CreateCursorResponse(1, databaseName+"."+collectionName, mtest.NextBatch)
 
