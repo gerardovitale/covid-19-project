@@ -7,6 +7,8 @@ import (
 	"github.com/covid-19-project/api/src/pkg/services"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+
+	// "go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -40,6 +42,8 @@ func (repo *repository) GetNewCasesPerLocation(location string) ([]services.NewC
 	if err = cursor.All(context.TODO(), &newCasesRecords); err != nil {
 		panic(err)
 	}
+
+	defer cursor.Close(context.TODO())
 
 	return newCasesRecords, err
 
