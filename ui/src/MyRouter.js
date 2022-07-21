@@ -1,12 +1,15 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Todo from './charts/Todo';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import BarChart from './charts/BarChart';
+import TestData from './charts/testData';
+
 
 const MyRouter = () => {
+
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<Todo />}></Route>
+                <Route path='/' element={<BarChart data={TestData} />}></Route>
             </Routes>
         </BrowserRouter>
     )
